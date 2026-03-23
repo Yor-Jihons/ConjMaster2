@@ -38,6 +38,7 @@ Node.jsをインストールしておいてください。
 
 ```shell
 git clone https://github.com/Yor-Jihons/ConjMaster2.git
+cd ConjMaster2
 ```
 
 ### Step2. installコマンドでパッケージの再現

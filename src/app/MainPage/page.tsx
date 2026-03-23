@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../../App.css';
 import CommonLayout from '../layout';
 import { useApi } from '../../contexts/ApiContext';
+import ConjInputBox from '../../components/ConjInputBox/ConjInputBox';
 
 const dummyUsers = [
   { id: 1, name: 'Alice', email: 'alice@example.com' },
@@ -42,9 +43,18 @@ function MainPage() {
     }
   };
 
+  const conjText_input = (  langId: number, verbId: number, conjId:number, conjText: string  ) => {
+    console.log( langId + ", " +  verbId + ", " + conjId + " = " + conjText );
+  }
+
   return (
     <CommonLayout>
       <div>
+        <ConjInputBox langId={1} verbId={1} conjId={1} person={"nosotros"} onInput={conjText_input} />
+
+
+
+
         <h1>Vite + React</h1>
 
         <h2>ユーザー詳細へ移動</h2>
