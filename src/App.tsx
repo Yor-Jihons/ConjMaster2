@@ -1,6 +1,6 @@
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import MainPage from './app/MainPage/page';
-import UserListPage from './app/UserListPage/page';
+import VerbListPage from './app/VerbListPage/page';
 import UserDetailPage from './app/UserDetailPage/page';
 import { ApiProvider } from './contexts/ApiProvider';
 import { ElectronApiClient } from './api/ElectronApiClient';
@@ -12,7 +12,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<MainPage />} />
-          <Route path="/users" element={<UserListPage />} />
+          <Route path="/:language" element={<VerbListPage />} />
           <Route path="/users/:id" element={<UserDetailPage />} />
         </Routes>
       </Router>
