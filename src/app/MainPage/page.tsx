@@ -4,6 +4,7 @@ import '../../App.css';
 import CommonLayout from '../layout';
 import { useApi } from '../../contexts/ApiContext';
 import ConjInputBox from '../../components/ConjInputBox/ConjInputBox';
+import ConjTestBox from '../../components/ConjTestBox/ConjITestBox';
 
 const dummyUsers = [
   { id: 1, name: 'Alice', email: 'alice@example.com' },
@@ -43,14 +44,23 @@ function MainPage() {
     }
   };
 
-  const conjText_input = (  langId: number, verbId: number, conjId:number, conjText: string  ) => {
+  const conjInput_input = (  langId: number, verbId: number, conjId:number, conjText: string  ) => {
     console.log( langId + ", " +  verbId + ", " + conjId + " = " + conjText );
+  }
+
+  const conjTest_input = ( userAnswer: string, answer: string ) => {
+    if( userAnswer === answer ){
+      console.log("OK");
+    }else{
+      console.log("OUT");
+    }
   }
 
   return (
     <CommonLayout>
       <div>
-        <ConjInputBox langId={1} verbId={1} conjId={1} person={"nosotros"} onInput={conjText_input} />
+        <ConjInputBox langId={1} verbId={1} conjId={1} person={"nosotros"} onInput={conjInput_input} />
+        <ConjTestBox person={"nosotros"} answer={"vamos"} onInput={conjTest_input} />
 
 
 
