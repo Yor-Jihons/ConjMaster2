@@ -48,8 +48,8 @@ function MainPage() {
     console.log( langId + ", " +  verbId + ", " + conjId + " = " + conjText );
   }
 
-  const conjTest_input = ( userAnswer: string, answer: string ) => {
-    if( userAnswer === answer ){
+  const conjTest_input = ( isCorrect: boolean ) => {
+    if( isCorrect ){
       console.log("OK");
     }else{
       console.log("OUT");
