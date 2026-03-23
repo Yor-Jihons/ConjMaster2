@@ -5,6 +5,7 @@ import CommonLayout from '../layout';
 import { useApi } from '../../contexts/ApiContext';
 import ConjInputBox from '../../components/ConjInputBox/ConjInputBox';
 import ConjTestBox from '../../components/ConjTestBox/ConjITestBox';
+import ConjSpanBox from '../../components/ConjSpanBox/ConjSpanBox';
 
 const dummyUsers = [
   { id: 1, name: 'Alice', email: 'alice@example.com' },
@@ -61,6 +62,7 @@ function MainPage() {
       <div>
         <ConjInputBox langId={1} verbId={1} conjId={1} person={"nosotros"} onInput={conjInput_input} />
         <ConjTestBox person={"nosotros"} answer={"vamos"} onInput={conjTest_input} />
+        <ConjSpanBox person={"nosotros"} conjText={"vamos"} />
 
 
 
