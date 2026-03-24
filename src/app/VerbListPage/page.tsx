@@ -18,6 +18,8 @@ function VerbListPage() {
       <div className={styles.flexbox1}>
         {language}
         <Link to="/">メイン画面に戻る</Link>
+
+        <Link to="/spanish/view/1">hablar</Link>
       </div>
     </CommonLayout>
   );
