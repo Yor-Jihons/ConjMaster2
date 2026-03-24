@@ -8,7 +8,7 @@ import styles from "./verblistpage.module.css";
 
 function VerbListPage() {
   //const [users, setUsers] = useState<typeof dummyUsers>([]);
-  const {language } = useParams<{ language: string }>();
+  const { language } = useParams<{ language: string }>()
   
   // useNavigateフックを呼び出す
   //const navigate = useNavigate();
