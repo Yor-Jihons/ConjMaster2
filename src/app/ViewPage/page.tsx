@@ -4,6 +4,26 @@ import createLanguageDefinition from '../../utils/CreateLanguageDefinition';
 import styles from "./viewpage.module.css";
 import ConjTestBox from '../../components/ConjTestBox/ConjITestBox';
 
+// 「hablar」のモックデータ
+const MOCK_DATA: Record<string, Record<string, string | string[]>> = {
+  "1": { // hablar (Spanish)
+    "present_participle": "hablando",
+    "past_participle": "hablado",
+    "infinitive": "hablar",
+    "pres_ind": ["hablo", "hablas", "habla", "hablamos", "habláis", "hablan"],
+    "pret_ind": ["hablé", "hablaste", "habló", "hablamos", "hablasteis", "hablaron"],
+    "imp_ind": ["hablaba", "hablabas", "hablaba", "hablábamos", "hablabais", "hablaban"],
+    "fut_ind": ["hablaré", "hablarás", "hablará", "hablaremos", "hablaréis", "hablarán"],
+    "cond_ind": ["hablaría", "hablarías", "hablaría", "hablaríamos", "hablaríais", "hablarían"],
+    "pres_sub": ["hable", "hables", "hable", "hablemos", "habléis", "hablen"],
+    "imp_sub_ra": ["hablara", "hablaras", "hablara", "habláramos", "hablarais", "hablaran"],
+    "imp_sub_se": ["hablase", "hablases", "hablase", "hablásemos", "hablaseis", "hablasen"],
+    "fut_sub": ["hablare", "hablares", "hablare", "habláremos", "hablareis", "hablaren"],
+    "aff_imp": ["", "habla", "hable", "hablemos", "hablad", "hablen"],
+    "neg_imp": ["", "no hables", "no hable", "no hablemos", "no habléis", "no hablen"],
+  }
+};
+
 function ViewPage() {
   const { language, id } = useParams<{ language: string, id: string }>();
   const langDef = createLanguageDefinition( language! );
@@ -20,6 +40,17 @@ function ViewPage() {
   }
 
   const verbName = id === "1" ? "hablar" : `動詞 ID: ${id}`;
+
+  const getAnswer = (tenseId: string, personIndex?: number): string => {
+    const verbData = MOCK_DATA[id || ""];
+    if (!verbData) return "todo";
+
+    const answer = verbData[tenseId];
+    if (Array.isArray(answer)) {
+      return answer[personIndex ?? 0] || "todo";
+    }
+    return answer || "todo";
+  };
 
   return (
     <CommonLayout>
@@ -39,7 +70,7 @@ function ViewPage() {
                       /* 分詞・準動詞は人称ループを回さない */
                       <ConjTestBox
                         person=""
-                        answer="todo"
+                        answer={getAnswer(tense.id)}
                       />
                     ) : (
                       /* 直説法・接続法・命令法などは人称ごとに表示 */
@@ -51,10 +82,7 @@ function ViewPage() {
                           <ConjTestBox
                             key={person}
                             person={person}
-                            answer="todo"
-                            onInput={(isCorrect) => {
-                              console.log(`${tense.label} ${person}: ${isCorrect ? "正解" : "不正解"}`);
-                            }}
+                            answer={getAnswer(tense.id, index)}
                           />
                         );
                       })
