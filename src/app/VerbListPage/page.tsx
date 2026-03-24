@@ -20,6 +20,7 @@ function VerbListPage() {
         <Link to="/">メイン画面に戻る</Link>
 
         <Link to="/spanish/view/1">hablar</Link>
+        <Link to="/french/view/2">habiter</Link>
       </div>
     </CommonLayout>
   );
