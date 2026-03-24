@@ -106,18 +106,6 @@ app.whenReady().then(() => {
     return (await dialog.showMessageBox( mainWindow, { message: message, buttons: buttons } ) as any).response;
   });
 
-  ipcMain.handle('get-users', () => {
-    return db.getUsers();
-  });
-
-  ipcMain.handle('add-user', (event, { name, email }) => {
-    return db.addUser( name, email );
-  });
-
-  ipcMain.handle('add-users-in-transaction', (event, users) => {
-    return db.addUsersWithTransaction( users );
-  });
-
   ipcMain.handle('save-json-file', async (event, { data, defaultFileName }) => {
     const { canceled, filePath } = await dialog.showSaveDialog(mainWindow, {
       defaultPath: defaultFileName,
@@ -146,6 +134,7 @@ app.whenReady().then(() => {
       }
 
       // DBに登録 (conjugationsはJSON文字列として保存)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const result = db.addVerb(data.language, data.verb, JSON.stringify(data.conjugations));
       return { success: true, name: data.verb };
     } catch (err) {
