@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import CommonLayout from '../layout';
 import createLanguageDefinition from '../../utils/CreateLanguageDefinition';
-import styles from "./viewpage.module.css";
+import styles from "../ViewPage/viewpage.module.css"; // スタイルを再利用
 import ConjTestBox from '../../components/ConjTestBox/ConjITestBox';
 
 // モックデータ (1: Spanish hablar, 2: French habiter, 3: Italian amare)
@@ -91,8 +91,8 @@ function TestPage() {
   return (
     <CommonLayout>
       <div className={styles.flexbox1}>
-        <h1>{verbName} ({language})</h1>
-        <Link to={`/${language}`}>一覧に戻る</Link>
+        <h1>{verbName} 活用テスト ({language})</h1>
+        <Link to={`/${language}/list`}>一覧に戻る</Link>
 
         {langDef.groups.map((group) => (
           <div key={group.id} className={styles.groupContainer}>

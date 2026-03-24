@@ -6,6 +6,14 @@ import styles from "./verblistpage.module.css";
 function VerbListPage() {
   const { language } = useParams<{ language: string }>()
 
+  const verbs = [
+    { id: "1", name: "hablar", lang: "spanish" },
+    { id: "2", name: "habiter", lang: "french" },
+    { id: "3", name: "amare", lang: "italian" }
+  ];
+
+  const currentVerbs = verbs.filter(v => v.lang === language);
+
   return (
     <CommonLayout>
       <div className={styles.flexbox1}>
@@ -13,14 +21,18 @@ function VerbListPage() {
         <Link to="/">メイン画面に戻る</Link>
 
         <div className={styles.verbList}>
-          {language === "spanish" && (
-            <Link to="/spanish/test/1" className={styles.verbLink}>hablar</Link>
-          )}
-          {language === "french" && (
-            <Link to="/french/test/2" className={styles.verbLink}>habiter</Link>
-          )}
-          {language === "italian" && (
-            <Link to="/italian/test/3" className={styles.verbLink}>amare</Link>
+          {currentVerbs.length > 0 ? (
+            currentVerbs.map(verb => (
+              <div key={verb.id} className={styles.verbItem}>
+                <span className={styles.verbName}>{verb.name}</span>
+                <div className={styles.verbActions}>
+                  <Link to={`/${language}/view/${verb.id}`} className={styles.viewButton}>表示</Link>
+                  <Link to={`/${language}/test/${verb.id}`} className={styles.testButton}>テスト</Link>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>動詞が登録されていません。</p>
           )}
         </div>
       </div>

@@ -2,7 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import CommonLayout from '../layout';
 import createLanguageDefinition from '../../utils/CreateLanguageDefinition';
 import styles from "./viewpage.module.css";
-import ConjTestBox from '../../components/ConjTestBox/ConjITestBox';
+import ConjSpanBox from '../../components/ConjSpanBox/ConjSpanBox';
 
 // モックデータ (1: Spanish hablar, 2: French habiter, 3: Italian amare)
 const MOCK_DATA: Record<string, { name: string, conj: Record<string, string | string[]> }> = {
@@ -79,20 +79,20 @@ function ViewPage() {
   const verbName = currentVerb ? currentVerb.name : `動詞 ID: ${id}`;
 
   const getAnswer = (tenseId: string, personIndex?: number): string => {
-    if (!currentVerb) return "todo";
+    if (!currentVerb) return "---";
 
     const answer = currentVerb.conj[tenseId];
     if (Array.isArray(answer)) {
-      return answer[personIndex ?? 0] || "todo";
+      return answer[personIndex ?? 0] || "---";
     }
-    return answer || "todo";
+    return answer || "---";
   };
 
   return (
     <CommonLayout>
       <div className={styles.flexbox1}>
-        <h1>{verbName} ({language})</h1>
-        <Link to={`/${language}`}>一覧に戻る</Link>
+        <h1>{verbName} 活用表 ({language})</h1>
+        <Link to={`/${language}/list`}>一覧に戻る</Link>
 
         {langDef.groups.map((group) => (
           <div key={group.id} className={styles.groupContainer}>
@@ -103,9 +103,9 @@ function ViewPage() {
                   <h3>{tense.label}</h3>
                   <div className={styles.conjGrid}>
                     {group.id === "non_finite" ? (
-                      <ConjTestBox
+                      <ConjSpanBox
                         person=""
-                        answer={getAnswer(tense.id)}
+                        conjText={getAnswer(tense.id)}
                       />
                     ) : (
                       langDef.persons.map((person, index) => {
@@ -115,10 +115,10 @@ function ViewPage() {
                         if (group.id === "imperative" && !answer) return null;
 
                         return (
-                          <ConjTestBox
+                          <ConjSpanBox
                             key={person}
                             person={person}
-                            answer={answer}
+                            conjText={answer}
                           />
                         );
                       })

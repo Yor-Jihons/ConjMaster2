@@ -1,4 +1,59 @@
-.flexbox1{
+.flexbox1 {
     display: flex;
     flex-direction: column;
+    padding: 20px;
+    gap: 20px;
+}
+
+.verbList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.verbItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background-color: #fcfcfc;
+}
+
+.verbName {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.verbActions {
+    display: flex;
+    gap: 10px;
+}
+
+.viewButton, .testButton {
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.viewButton {
+    background-color: #e0f0ff;
+    color: #007bff;
+}
+
+.viewButton:hover {
+    background-color: #d0e8ff;
+}
+
+.testButton {
+    background-color: #28a745;
+    color: white;
+}
+
+.testButton:hover {
+    background-color: #218838;
 }
