@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer } from 'electron';
+import { contextBridge, ipcRenderer, webUtils } from 'electron';
 
 contextBridge.exposeInMainWorld('interprocessCommunication', {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -18,7 +18,16 @@ contextBridge.exposeInMainWorld('interprocessCommunication', {
   saveJsonFile: ( data: any, defaultFileName: string ) => ipcRenderer.invoke('save-json-file', { data, defaultFileName }),
 
   // 動詞DB用
-  importVerbJson: ( filePath: string ) => ipcRenderer.invoke('import-verb-json', filePath ),
+  importVerbJson: ( fileOrPath: File | string ) => {
+    let path = "";
+    if (typeof fileOrPath === 'string') {
+      path = fileOrPath;
+    } else {
+      // File オブジェクトから安全にパスを取得 (Electron 20+ / Sandbox環境)
+      path = webUtils.getPathForFile(fileOrPath);
+    }
+    return ipcRenderer.invoke('import-verb-json', path );
+  },
   getVerbs: ( lang_id: string ) => ipcRenderer.invoke('get-verbs-list', lang_id ),
   getVerbDetail: ( id: number ) => ipcRenderer.invoke('get-verb-detail', id ),
 });

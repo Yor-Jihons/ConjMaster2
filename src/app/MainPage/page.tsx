@@ -10,19 +10,32 @@ function MainPage() {
 
   useEffect(() => {
     const handleDrop = async (e: DragEvent) => {
+      console.log("Drop event detected");
       e.preventDefault();
+      e.stopPropagation();
+      
       const files = e.dataTransfer?.files;
       if (files && files.length > 0) {
+        console.log(`Dropped ${files.length} files`);
         for (const file of Array.from(files)) {
-          // Electron環境では file.path でフルパスが取得可能です
-          const filePath = (file as any).path;
-          if (filePath && filePath.toLowerCase().endsWith(".json")) {
-            const result = await api.importVerbJson(filePath);
-            if (result.success) {
-              alert(`「${result.name}」をデータベースにインポートしました！`);
-            } else {
-              alert(`インポート失敗: ${result.error}`);
+          console.log("File name:", file.name);
+          
+          if (file.name.toLowerCase().endsWith(".json")) {
+            try {
+              // file.path ではなく file オブジェクトをそのまま渡す
+              const result = await api.importVerbJson(file);
+              console.log("Import result:", result);
+              if (result.success) {
+                alert(`「${result.name}」をデータベースにインポートしました！`);
+              } else {
+                alert(`インポート失敗: ${result.error}`);
+              }
+            } catch (err) {
+              console.error("IPC Call Error:", err);
+              alert("メインプロセスとの通信に失敗しました。再起動してビルドを確認してください。");
             }
+          } else {
+            console.log("Not a JSON file or path missing");
           }
         }
       }
@@ -31,6 +44,9 @@ function MainPage() {
     const handleDragOver = (e: DragEvent) => {
       e.preventDefault();
       e.stopPropagation();
+      if (e.dataTransfer) {
+        e.dataTransfer.dropEffect = 'copy';
+      }
     };
 
     window.addEventListener("drop", handleDrop);
@@ -64,10 +80,12 @@ function MainPage() {
           <button onClick={italianButton_click} style={{ padding: "15px 30px", fontSize: "1.2rem", cursor: "pointer" }}>イタリア語</button>
         </div>
         
-        <div style={{ marginTop: "50px", padding: "30px", border: "2px dashed #ccc", borderRadius: "15px", backgroundColor: "#f9f9f9", textAlign: "center", width: "80%" }}>
-          <p style={{ fontSize: "1.1rem", color: "#666" }}>
-            ここに動詞のJSONファイルをドラッグ＆ドロップすると、<br />
-            データベースに自動登録されます。
+        <div style={{ marginTop: "50px", padding: "30px", border: "2px dashed #28a745", borderRadius: "15px", backgroundColor: "#f9f9f9", textAlign: "center", width: "80%" }}>
+          <p style={{ fontSize: "1.1rem", color: "#28a745", fontWeight: "bold" }}>
+            ここに動詞のJSONファイルをドラッグ＆ドロップ！
+          </p>
+          <p style={{ fontSize: "0.9rem", color: "#666" }}>
+            (自動的にデータベースに登録されます)
           </p>
         </div>
       </div>

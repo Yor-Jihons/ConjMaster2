@@ -18,9 +18,10 @@ export interface IInterprocessCommunication {
   saveJsonFile: ( data: any, defaultFileName: string ) => Promise<{ success: boolean, filePath?: string, error?: string }>;
 
   /**
-   * 指定されたパスのJSONファイルを読み込み、動詞データベースに登録します。
+   * JSONファイルを読み込み、動詞データベースに登録します。
+   * レンダラーからは File オブジェクトを直接渡せます。
    */
-  importVerbJson: ( filePath: string ) => Promise<{ success: boolean, name?: string, error?: string }>;
+  importVerbJson: ( fileOrPath: File | string ) => Promise<{ success: boolean, name?: string, error?: string }>;
 
   /**
    * 指定された言語の動詞一覧を取得します。
