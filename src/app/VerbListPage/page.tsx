@@ -1,18 +1,21 @@
-import { Link } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import CommonLayout from '../layout';
 import styles from "./verblistpage.module.css";
+import { useApi } from '../../contexts/ApiContext';
 
 function VerbListPage() {
   const { language } = useParams<{ language: string }>()
+  const api = useApi();
+  const [verbs, setVerbs] = useState<any[]>([]);
 
-  const verbs = [
-    { id: "1", name: "hablar", lang: "spanish" },
-    { id: "2", name: "habiter", lang: "french" },
-    { id: "3", name: "amare", lang: "italian" }
-  ];
-
-  const currentVerbs = verbs.filter(v => v.lang === language);
+  useEffect(() => {
+    const fetchVerbs = async () => {
+      const data = await api.getVerbs(language!);
+      setVerbs(data);
+    };
+    fetchVerbs();
+  }, [language, api]);
 
   return (
     <CommonLayout>
@@ -24,8 +27,8 @@ function VerbListPage() {
         </div>
 
         <div className={styles.verbList}>
-          {currentVerbs.length > 0 ? (
-            currentVerbs.map(verb => (
+          {verbs.length > 0 ? (
+            verbs.map(verb => (
               <div key={verb.id} className={styles.verbItem}>
                 <span className={styles.verbName}>{verb.name}</span>
                 <div className={styles.verbActions}>
@@ -35,7 +38,12 @@ function VerbListPage() {
               </div>
             ))
           ) : (
-            <p>動詞が登録されていません。</p>
+            <div style={{ padding: "40px", textAlign: "center", border: "1px dashed #ccc" }}>
+              <p>動詞が登録されていません。</p>
+              <p style={{ fontSize: "0.9rem", color: "#666" }}>
+                JSONファイルをトップ画面にドラッグ＆ドロップして登録してください。
+              </p>
+            </div>
           )}
         </div>
       </div>

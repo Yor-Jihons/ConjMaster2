@@ -16,6 +16,21 @@ export interface IInterprocessCommunication {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   saveJsonFile: ( data: any, defaultFileName: string ) => Promise<{ success: boolean, filePath?: string, error?: string }>;
+
+  /**
+   * 指定されたパスのJSONファイルを読み込み、動詞データベースに登録します。
+   */
+  importVerbJson: ( filePath: string ) => Promise<{ success: boolean, name?: string, error?: string }>;
+
+  /**
+   * 指定された言語の動詞一覧を取得します。
+   */
+  getVerbs: ( lang_id: string ) => Promise<any[]>;
+
+  /**
+   * 指定されたIDの動詞詳細情報を取得します。
+   */
+  getVerbDetail: ( id: number ) => Promise<any>;
 }
 
 declare global {

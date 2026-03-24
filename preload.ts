@@ -16,4 +16,9 @@ contextBridge.exposeInMainWorld('interprocessCommunication', {
   // JSON保存用
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   saveJsonFile: ( data: any, defaultFileName: string ) => ipcRenderer.invoke('save-json-file', { data, defaultFileName }),
+
+  // 動詞DB用
+  importVerbJson: ( filePath: string ) => ipcRenderer.invoke('import-verb-json', filePath ),
+  getVerbs: ( lang_id: string ) => ipcRenderer.invoke('get-verbs-list', lang_id ),
+  getVerbDetail: ( id: number ) => ipcRenderer.invoke('get-verb-detail', id ),
 });

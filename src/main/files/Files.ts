@@ -16,4 +16,8 @@ export default class Files{
     public static writeStringFile( filePath: string, content: string ){
         fs.writeFileSync( filePath, content, 'utf8' );
     }
+
+    public static readStringFile( filePath: string ){
+        return fs.readFileSync( filePath, 'utf8' );
+    }
 }

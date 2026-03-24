@@ -35,7 +35,44 @@ export default class DataBaseEx{
                 name TEXT NOT NULL,
                 email TEXT NOT NULL UNIQUE
             );
+            CREATE TABLE IF NOT EXISTS verbs (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                lang_id TEXT NOT NULL,
+                name TEXT NOT NULL,
+                data TEXT NOT NULL
+            );
         `);
+    }
+
+    public addVerb(lang_id: string, name: string, data: string) {
+        try {
+            const stmt = this.#db!.prepare('INSERT INTO verbs (lang_id, name, data) VALUES (?, ?, ?)');
+            const info = stmt.run(lang_id, name, data);
+            return { success: true, id: info.lastInsertRowid };
+        } catch (error: unknown) {
+            console.error('Failed to add verb:', error);
+            return { success: false, error: (error as Error).message };
+        }
+    }
+
+    public getVerbs(lang_id: string) {
+        try {
+            const stmt = this.#db!.prepare('SELECT id, name FROM verbs WHERE lang_id = ?');
+            return stmt.all(lang_id);
+        } catch (error: unknown) {
+            console.error('Failed to fetch verbs:', error);
+            return [];
+        }
+    }
+
+    public getVerbDetail(id: number) {
+        try {
+            const stmt = this.#db!.prepare('SELECT * FROM verbs WHERE id = ?');
+            return stmt.get(id);
+        } catch (error: unknown) {
+            console.error('Failed to fetch verb detail:', error);
+            return null;
+        }
     }
 
     public getUsers(){
