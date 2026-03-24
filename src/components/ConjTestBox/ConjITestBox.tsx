@@ -18,10 +18,10 @@ const ConjTestBox = ({ onInput, person, answer }: Props) => {
 
         if( text === answer ){
             ref.current.style.backgroundColor = "#ccffcc";
-            onInput!( true );
+            onInput?.( true );
         }else{
             ref.current.style.backgroundColor = "#ff0000";
-            onInput!( false );
+            onInput?.( false );
         }
     }
 

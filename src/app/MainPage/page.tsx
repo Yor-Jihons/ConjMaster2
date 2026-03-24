@@ -1,87 +1,93 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../App.css';
 import CommonLayout from '../layout';
 import { useApi } from '../../contexts/ApiContext';
-import ConjInputBox from '../../components/ConjInputBox/ConjInputBox';
-import ConjTestBox from '../../components/ConjTestBox/ConjITestBox';
-import ConjSpanBox from '../../components/ConjSpanBox/ConjSpanBox';
-
-const dummyUsers = [
-  { id: 1, name: 'Alice', email: 'alice@example.com' },
-  { id: 2, name: 'Bob', email: 'bob@example.com' },
-  { id: 3, name: 'Charlie', email: 'charlie@example.com' },
-];
 
 function MainPage() {
   const api = useApi();
-
-  // useNavigateフックを呼び出す
   const navigate = useNavigate();
-  const [selectedUser, setSelectedUser] = useState<string>('');
-  const [users, setUsers] = useState<typeof dummyUsers>([]);
-  const [usersFromDB, setUsersFromDB] = useState<string[]>( [] );
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      const tmp = await api.getUsers();
-      //console.log( data[0][ "name" ] as string );
-      const usr = tmp.map( (data) => {
-        return data[ "name" ];
-      });
-      setUsersFromDB( usr );
+    const handleDrop = async (e: DragEvent) => {
+      console.log("Drop event detected");
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const files = e.dataTransfer?.files;
+      if (files && files.length > 0) {
+        console.log(`Dropped ${files.length} files`);
+        for (const file of Array.from(files)) {
+          console.log("File name:", file.name);
+          
+          if (file.name.toLowerCase().endsWith(".json")) {
+            try {
+              // file.path ではなく file オブジェクトをそのまま渡す
+              const result = await api.importVerbJson(file);
+              console.log("Import result:", result);
+              if (result.success) {
+                alert(`「${result.name}」をデータベースにインポートしました！`);
+              } else {
+                alert(`インポート失敗: ${result.error}`);
+              }
+            } catch (err) {
+              console.error("IPC Call Error:", err);
+              alert("メインプロセスとの通信に失敗しました。再起動してビルドを確認してください。");
+            }
+          } else {
+            console.log("Not a JSON file or path missing");
+          }
+        }
+      }
     };
-    fetchUsers();
-    setUsers(dummyUsers);
-  }, []);
 
-  // セレクトボックスの変更イベントハンドラ
-  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const userId = event.target.value;
-    setSelectedUser(userId);
-    // 選択値が変更されたら即座に遷移
-    if (userId) {
-      navigate(`/users/${userId}`);
-    }
-  };
+    const handleDragOver = (e: DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.dataTransfer) {
+        e.dataTransfer.dropEffect = 'copy';
+      }
+    };
 
-  const conjInput_input = (  langId: number, verbId: number, conjId:number, conjText: string  ) => {
-    console.log( langId + ", " +  verbId + ", " + conjId + " = " + conjText );
+    window.addEventListener("drop", handleDrop);
+    window.addEventListener("dragover", handleDragOver);
+    
+    return () => {
+      window.removeEventListener("drop", handleDrop);
+      window.removeEventListener("dragover", handleDragOver);
+    };
+  }, [api]);
+
+  const spanishButton_click = () => {
+    navigate( "/spanish/list" );
   }
 
-  const conjTest_input = ( isCorrect: boolean ) => {
-    if( isCorrect ){
-      console.log("OK");
-    }else{
-      console.log("OUT");
-    }
+  const frenchButton_click = () => {
+    navigate( "/french/list" );
+  }
+
+  const italianButton_click = () => {
+    navigate( "/italian/list" );
   }
 
   return (
     <CommonLayout>
-      <div>
-        <ConjInputBox langId={1} verbId={1} conjId={1} person={"nosotros"} onInput={conjInput_input} />
-        <ConjTestBox person={"nosotros"} answer={"vamos"} onInput={conjTest_input} />
-        <ConjSpanBox person={"nosotros"} conjText={"vamos"} />
-
-
-
-
-        <h1>Vite + React</h1>
-
-        <h2>ユーザー詳細へ移動</h2>
-        <select onChange={handleSelectChange} value={selectedUser}>
-          <option value="">ユーザーを選択してください</option>
-          {users.map((user) => (
-            <option key={user.id} value={user.id}>{user.name}</option>
-          ))}
-        </select>
-
-        <select>
-          {usersFromDB.map( (users, idx) => {
-            return <option key={idx}>{users}</option>
-          })}
-        </select>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "20px", padding: "40px" }}>
+        <h1>言語を選択してください</h1>
+        <div style={{ display: "flex", gap: "20px" }}>
+          <button onClick={spanishButton_click} style={{ padding: "15px 30px", fontSize: "1.2rem", cursor: "pointer" }}>スペイン語</button>
+          <button onClick={frenchButton_click} style={{ padding: "15px 30px", fontSize: "1.2rem", cursor: "pointer" }}>フランス語</button>
+          <button onClick={italianButton_click} style={{ padding: "15px 30px", fontSize: "1.2rem", cursor: "pointer" }}>イタリア語</button>
+        </div>
+        
+        <div style={{ marginTop: "50px", padding: "30px", border: "2px dashed #28a745", borderRadius: "15px", backgroundColor: "#f9f9f9", textAlign: "center", width: "80%" }}>
+          <p style={{ fontSize: "1.1rem", color: "#28a745", fontWeight: "bold" }}>
+            ここに動詞のJSONファイルをドラッグ＆ドロップ！
+          </p>
+          <p style={{ fontSize: "0.9rem", color: "#666" }}>
+            (自動的にデータベースに登録されます)
+          </p>
+        </div>
       </div>
     </CommonLayout>
   );

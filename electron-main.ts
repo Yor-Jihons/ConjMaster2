@@ -106,16 +106,49 @@ app.whenReady().then(() => {
     return (await dialog.showMessageBox( mainWindow, { message: message, buttons: buttons } ) as any).response;
   });
 
-  ipcMain.handle('get-users', () => {
-    return db.getUsers();
+  ipcMain.handle('save-json-file', async (event, { data, defaultFileName }) => {
+    const { canceled, filePath } = await dialog.showSaveDialog(mainWindow, {
+      defaultPath: defaultFileName,
+      filters: [{ name: 'JSON', extensions: ['json'] }]
+    });
+
+    if (canceled || !filePath) return { success: false };
+
+    try {
+      Files.writeStringFile(filePath, JSON.stringify(data, null, 2));
+      return { success: true, filePath };
+    } catch (err) {
+      console.error(err);
+      return { success: false, error: (err as Error).message };
+    }
   });
 
-  ipcMain.handle('add-user', (event, { name, email }) => {
-    return db.addUser( name, email );
+  ipcMain.handle('import-verb-json', async (event, filePath) => {
+    try {
+      const content = Files.readStringFile(filePath);
+      const data = JSON.parse(content);
+
+      // 基本的なバリデーション
+      if (!data.language || !data.verb || !data.conjugations) {
+        throw new Error("Invalid JSON format. Requires language, verb, and conjugations.");
+      }
+
+      // DBに登録 (conjugationsはJSON文字列として保存)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const result = db.addVerb(data.language, data.verb, JSON.stringify(data.conjugations));
+      return { success: true, name: data.verb };
+    } catch (err) {
+      console.error('Import failed:', err);
+      return { success: false, error: (err as Error).message };
+    }
   });
 
-  ipcMain.handle('add-users-in-transaction', (event, users) => {
-    return db.addUsersWithTransaction( users );
+  ipcMain.handle('get-verbs-list', (event, lang_id) => {
+    return db.getVerbs(lang_id);
+  });
+
+  ipcMain.handle('get-verb-detail', (event, id) => {
+    return db.getVerbDetail(id);
   });
 });
 

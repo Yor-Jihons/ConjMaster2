@@ -10,7 +10,7 @@ interface Props {
 const TextContainerBox = ({ children, htmlFor, person }: Props) => {
     return (
         <p>
-            <label htmlFor={htmlFor} className={styles.label1}>{person}</label>
+            {person && <label htmlFor={htmlFor} className={styles.label1}>{person}</label>}
             {children}
         </p>
     );

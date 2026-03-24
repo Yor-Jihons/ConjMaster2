@@ -13,6 +13,9 @@ export const ElectronApiClient: IInterprocessCommunication = {
     electron: () => window.interprocessCommunication.electron(),
     showMessageBox: (message, buttons) => window.interprocessCommunication.showMessageBox(message, buttons),
 
-    getUsers: () => window.interprocessCommunication.getUsers(),
-    addUser: (name, email) => window.interprocessCommunication.addUser(name, email),
-};
+    saveJsonFile: (data, defaultFileName) => window.interprocessCommunication.saveJsonFile(data, defaultFileName),
+
+    importVerbJson: (filePath) => window.interprocessCommunication.importVerbJson(filePath),
+    getVerbs: (lang_id) => window.interprocessCommunication.getVerbs(lang_id),
+    getVerbDetail: (id) => window.interprocessCommunication.getVerbDetail(id),
+    };

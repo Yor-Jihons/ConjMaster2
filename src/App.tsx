@@ -1,7 +1,9 @@
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import MainPage from './app/MainPage/page';
-import UserListPage from './app/UserListPage/page';
-import UserDetailPage from './app/UserDetailPage/page';
+import VerbListPage from './app/VerbListPage/page';
+import ViewPage from './app/ViewPage/page';
+import TestPage from './app/TestPage/page';
+import RegisterPage from './app/RegisterPage/page';
 import { ApiProvider } from './contexts/ApiProvider';
 import { ElectronApiClient } from './api/ElectronApiClient';
 import './App.css';
@@ -12,8 +14,12 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<MainPage />} />
-          <Route path="/users" element={<UserListPage />} />
-          <Route path="/users/:id" element={<UserDetailPage />} />
+          <Route path="/:language/list" element={<VerbListPage />} />
+          <Route path="/:language/view/:id" element={<ViewPage />} />
+          <Route path="/:language/test/:id" element={<TestPage />} />
+          <Route path="/:language/register" element={<RegisterPage />} />
+          {/* 下位互換用 */}
+          <Route path="/:language" element={<VerbListPage />} />
         </Routes>
       </Router>
     </ApiProvider>
