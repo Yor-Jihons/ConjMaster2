@@ -12,4 +12,8 @@ export default class Files{
     public static moveFile( oldPath: string, newPath: string ){
         fs.renameSync( oldPath, newPath );
     }
+
+    public static writeStringFile( filePath: string, content: string ){
+        fs.writeFileSync( filePath, content, 'utf8' );
+    }
 }

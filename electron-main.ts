@@ -117,6 +117,23 @@ app.whenReady().then(() => {
   ipcMain.handle('add-users-in-transaction', (event, users) => {
     return db.addUsersWithTransaction( users );
   });
+
+  ipcMain.handle('save-json-file', async (event, { data, defaultFileName }) => {
+    const { canceled, filePath } = await dialog.showSaveDialog(mainWindow, {
+      defaultPath: defaultFileName,
+      filters: [{ name: 'JSON', extensions: ['json'] }]
+    });
+
+    if (canceled || !filePath) return { success: false };
+
+    try {
+      Files.writeStringFile(filePath, JSON.stringify(data, null, 2));
+      return { success: true, filePath };
+    } catch (err) {
+      console.error(err);
+      return { success: false, error: (err as Error).message };
+    }
+  });
 });
 
 app.on('window-all-closed', () => {

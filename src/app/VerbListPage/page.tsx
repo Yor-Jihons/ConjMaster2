@@ -18,7 +18,10 @@ function VerbListPage() {
     <CommonLayout>
       <div className={styles.flexbox1}>
         <h1>{language} の動詞一覧</h1>
-        <Link to="/">メイン画面に戻る</Link>
+        <div style={{ display: "flex", gap: "20px" }}>
+          <Link to="/">メイン画面に戻る</Link>
+          <Link to={`/${language}/register`} style={{ color: "#28a745", fontWeight: "bold" }}>＋ 新しい動詞を登録してJSONを作る</Link>
+        </div>
 
         <div className={styles.verbList}>
           {currentVerbs.length > 0 ? (

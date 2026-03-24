@@ -14,5 +14,7 @@ export const ElectronApiClient: IInterprocessCommunication = {
     showMessageBox: (message, buttons) => window.interprocessCommunication.showMessageBox(message, buttons),
 
     getUsers: () => window.interprocessCommunication.getUsers(),
-    addUser: (name, email) => window.interprocessCommunication.addUser(name, email),
-};
+    addUser: (name: string, email: string) => window.interprocessCommunication.addUser(name, email),
+
+    saveJsonFile: (data, defaultFileName) => window.interprocessCommunication.saveJsonFile(data, defaultFileName),
+    };

@@ -12,4 +12,8 @@ contextBridge.exposeInMainWorld('interprocessCommunication', {
   // IPC通信用のAPIを追加
   getUsers: () => ipcRenderer.invoke('get-users'),
   addUser: (name: string, email: string) => ipcRenderer.invoke('add-user', { name, email }),
+  
+  // JSON保存用
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  saveJsonFile: ( data: any, defaultFileName: string ) => ipcRenderer.invoke('save-json-file', { data, defaultFileName }),
 });
