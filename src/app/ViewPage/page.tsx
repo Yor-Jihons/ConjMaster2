@@ -4,7 +4,7 @@ import createLanguageDefinition from '../../utils/CreateLanguageDefinition';
 import styles from "./viewpage.module.css";
 import ConjTestBox from '../../components/ConjTestBox/ConjITestBox';
 
-// モックデータ (1: Spanish hablar, 2: French habiter)
+// モックデータ (1: Spanish hablar, 2: French habiter, 3: Italian amare)
 const MOCK_DATA: Record<string, { name: string, conj: Record<string, string | string[]> }> = {
   "1": { 
     name: "hablar",
@@ -39,6 +39,23 @@ const MOCK_DATA: Record<string, { name: string, conj: Record<string, string | st
       "pres_sub": ["habite", "habites", "habite", "habitions", "habitiez", "habitent"],
       "imp_sub": ["habitasse", "habitasses", "habitât", "habitassions", "habitassiez", "habitassent"],
       "pres_imp": ["", "habite", "habitons", "habitez", "", ""],
+    }
+  },
+  "3": {
+    name: "amare",
+    conj: {
+      "present_participle": "amante",
+      "past_participle": "amato",
+      "gerund": "amando",
+      "infinitive": "amare",
+      "pres_ind": ["amo", "ami", "ama", "amiamo", "amate", "amano"],
+      "imp_ind": ["amavo", "amavi", "amava", "amavamo", "amavate", "amavano"],
+      "rem_ind": ["amai", "amasti", "amò", "amammo", "amaste", "amarono"],
+      "fut_ind": ["amerò", "amerai", "amerà", "ameremo", "amerete", "ameranno"],
+      "cond_ind": ["amerei", "ameresti", "amerebbe", "ameremmo", "amereste", "amerebbero"],
+      "pres_sub": ["ami", "ami", "ami", "amiamo", "amiate", "amino"],
+      "imp_sub": ["amassi", "amassi", "amasse", "amassimo", "amaste", "amassero"],
+      "pres_imp": ["", "ama", "ami", "amiamo", "amate", "amino"],
     }
   }
 };
@@ -95,7 +112,6 @@ function ViewPage() {
                         if (group.id === "imperative" && index === 0) return null;
                         
                         const answer = getAnswer(tense.id, index);
-                        // 命令法で活用がない人称(ilsなど)はスキップ
                         if (group.id === "imperative" && !answer) return null;
 
                         return (

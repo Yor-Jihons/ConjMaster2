@@ -20,7 +20,7 @@ function VerbListPage() {
             <Link to="/french/view/2" className={styles.verbLink}>habiter</Link>
           )}
           {language === "italian" && (
-            <p>動詞が登録されていません。</p>
+            <Link to="/italian/view/3" className={styles.verbLink}>amare</Link>
           )}
         </div>
       </div>
