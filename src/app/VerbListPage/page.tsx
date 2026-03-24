@@ -14,13 +14,13 @@ function VerbListPage() {
 
         <div className={styles.verbList}>
           {language === "spanish" && (
-            <Link to="/spanish/view/1" className={styles.verbLink}>hablar</Link>
+            <Link to="/spanish/test/1" className={styles.verbLink}>hablar</Link>
           )}
           {language === "french" && (
-            <Link to="/french/view/2" className={styles.verbLink}>habiter</Link>
+            <Link to="/french/test/2" className={styles.verbLink}>habiter</Link>
           )}
           {language === "italian" && (
-            <Link to="/italian/view/3" className={styles.verbLink}>amare</Link>
+            <Link to="/italian/test/3" className={styles.verbLink}>amare</Link>
           )}
         </div>
       </div>
