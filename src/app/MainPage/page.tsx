@@ -10,7 +10,6 @@ function MainPage() {
 
   useEffect(() => {
     const handleDrop = async (e: DragEvent) => {
-      console.log("Drop event detected");
       e.preventDefault();
       e.stopPropagation();
       
@@ -21,18 +20,17 @@ function MainPage() {
             try {
               // file.path ではなく file オブジェクトをそのまま渡す
               const result = await api.importVerbJson(file);
-              console.log("Import result:", result);
               if (result.success) {
                 alert(`「${result.name}」をデータベースにインポートしました！`);
               } else {
                 alert(`インポート失敗: ${result.error}`);
               }
-            } catch (err) {
-              console.error("IPC Call Error:", err);
+            } catch (err: unknown) {
+              console.error("IPC Call Error:", (err as Error));
               alert("メインプロセスとの通信に失敗しました。再起動してビルドを確認してください。");
             }
           } else {
-            console.log("Not a JSON file or path missing");
+            alert("Not a JSON file or path missing");
           }
         }
       }
