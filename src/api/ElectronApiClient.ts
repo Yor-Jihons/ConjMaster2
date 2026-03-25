@@ -18,4 +18,4 @@ export const ElectronApiClient: IInterprocessCommunication = {
     importVerbJson: (filePath) => window.interprocessCommunication.importVerbJson(filePath),
     getVerbs: (lang_id) => window.interprocessCommunication.getVerbs(lang_id),
     getVerbDetail: (id) => window.interprocessCommunication.getVerbDetail(id),
-    };
+};
