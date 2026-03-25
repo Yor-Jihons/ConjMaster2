@@ -16,10 +16,7 @@ function MainPage() {
       
       const files = e.dataTransfer?.files;
       if (files && files.length > 0) {
-        console.log(`Dropped ${files.length} files`);
         for (const file of Array.from(files)) {
-          console.log("File name:", file.name);
-          
           if (file.name.toLowerCase().endsWith(".json")) {
             try {
               // file.path ではなく file オブジェクトをそのまま渡す
