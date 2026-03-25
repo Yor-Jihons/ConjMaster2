@@ -20,7 +20,7 @@ const ConjTestBox = ({ onInput, person, answer }: Props) => {
             ref.current.style.backgroundColor = "#ccffcc";
             onInput?.( true );
         }else{
-            ref.current.style.backgroundColor = "#ff0000";
+            ref.current.style.backgroundColor = "#E6A8AD";
             onInput?.( false );
         }
     }
