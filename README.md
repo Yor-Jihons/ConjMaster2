@@ -55,15 +55,11 @@ npm install
 npx electron-rebuild
 ```
 
-### Step4. プロジェクト名等の変更
+### Step4. ビルド
 
-* `package.json`の`name`の値
-* `package.json`の`version`の値
-* `package.json`の`build.appId`の値 (*1)
-* `index.html`の`title`タグの値
-* `README.md.txt`のプロジェクト名
-
-`*1`: 一般的には`com.github.your-github-username.your-app-name`のような名前としていることが多いようです。
+```shell
+npm run build:electron
+```
 
 ---
 
