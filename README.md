@@ -63,6 +63,12 @@ npm run build:electron
 
 ---
 
+## ER図
+
+<img src="./doc/er1.svg" alt="ER図">
+
+---
+
 ## 🤝 貢献とライセンス
 
 This is under the MIT license. See also [LICENSE](./LICENSE).
