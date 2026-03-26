@@ -15,7 +15,7 @@ const ConjInputBox = ({ onInput, langId, verbId, conjId, person }: Props) => {
         const t: string = event.currentTarget.value;
         const langId = Number( event.currentTarget.dataset.langid );
         const verbId = Number( event.currentTarget.dataset.verbid );
-        const conjId = Number( event.currentTarget.dataset.verbid );
+        const conjId = Number( event.currentTarget.dataset.conjid );
         setText( t );
         onInput( langId, verbId, conjId, t );
     }
