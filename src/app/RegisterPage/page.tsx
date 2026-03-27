@@ -78,6 +78,14 @@ function RegisterPage() {
     }
   };
 
+  const resetForm = () => {
+    if (verbName && !confirm("入力内容を消去して、新しい動詞の入力を開始しますか？")) {
+      return;
+    }
+    setVerbName("");
+    setFormData({});
+  };
+
   return (
     <CommonLayout>
       <div className={styles.flexbox1}>
@@ -109,6 +117,13 @@ function RegisterPage() {
               />
               データベースにも登録する
             </label>
+
+            <button 
+              onClick={resetForm} 
+              style={{ padding: "10px 20px", backgroundColor: "#6c757d", color: "white", border: "none", borderRadius: "4px", cursor: "pointer", fontWeight: "bold", marginLeft: "auto" }}
+            >
+              入力をリフレッシュ
+            </button>
           </div>
 
           <p style={{ fontSize: "0.8rem", color: "#666", marginTop: "10px" }}>
