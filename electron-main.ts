@@ -150,6 +150,15 @@ app.whenReady().then(() => {
   ipcMain.handle('get-verb-detail', (event, id) => {
     return db.getVerbDetail(id);
   });
+
+  ipcMain.handle('add-verb', async (event, { lang_id, name, data }) => {
+    try {
+      return db.addVerb(lang_id, name, JSON.stringify(data));
+    } catch (err) {
+      console.error('Failed to add verb:', err);
+      return { success: false, error: (err as Error).message };
+    }
+  });
 });
 
 app.on('window-all-closed', () => {
