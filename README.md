@@ -71,7 +71,7 @@ npm run build:electron
 
 ## ER図
 
-<img src="./doc/er1.svg" alt="ER図">
+<img src="./doc/er.svg" alt="ER図">
 
 ---
 
