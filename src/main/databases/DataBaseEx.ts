@@ -69,4 +69,14 @@ export default class DataBaseEx{
             return null;
         }
     }
+
+    public getVerbByName(lang_id: string, name: string) {
+        try {
+            const stmt = this.#db!.prepare('SELECT * FROM verbs WHERE lang_id = ? AND name = ?');
+            return stmt.get(lang_id, name);
+        } catch (error: unknown) {
+            console.error('Failed to fetch verb by name:', error);
+            return null;
+        }
+    }
 }
