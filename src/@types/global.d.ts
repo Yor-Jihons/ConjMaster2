@@ -27,6 +27,11 @@ export interface IInterprocessCommunication {
    * 指定されたIDの動詞詳細情報を取得します。
    */
   getVerbDetail: ( id: number ) => Promise<any>;
+
+  /**
+   * メモリ上のデータを直接データベースに登録します。
+   */
+  addVerb: ( lang_id: string, name: string, data: any ) => Promise<{ success: boolean, id?: number, error?: string }>;
 }
 
 declare global {

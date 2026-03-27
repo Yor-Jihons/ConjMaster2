@@ -16,6 +16,9 @@ function RegisterPage() {
   // 活用データ { tenseId: ["hablo", "hablas", ...] }
   const [formData, setFormData] = useState<Record<string, string | string[]>>({});
 
+  // データベース登録フラグ
+  const [shouldRegisterToDb, setShouldRegisterToDb] = useState(true);
+
   if (!langDef) {
     return (
         <CommonLayout>
@@ -54,12 +57,33 @@ function RegisterPage() {
       conjugations: formData
     };
 
+    // JSONファイルとして保存
     const result = await api.saveJsonFile(exportData, `${verbName}_${language}.json`);
+    
     if (result.success) {
-      alert(`保存しました: ${result.filePath}`);
+      let message = `保存しました: ${result.filePath}`;
+
+      // データベースにも登録する場合
+      if (shouldRegisterToDb) {
+        const dbResult = await api.addVerb(language!, verbName, formData);
+        if (dbResult.success) {
+          message += "\nデータベースにも登録されました。";
+        } else {
+          message += `\nデータベース登録エラー: ${dbResult.error}`;
+        }
+      }
+      alert(message);
     } else if (result.error) {
       alert(`保存エラー: ${result.error}`);
     }
+  };
+
+  const resetForm = () => {
+    if (verbName && !confirm("入力内容を消去して、新しい動詞の入力を開始しますか？")) {
+      return;
+    }
+    setVerbName("");
+    setFormData({});
   };
 
   return (
@@ -69,18 +93,42 @@ function RegisterPage() {
         <Link to={`/${language}/list`}>一覧に戻る</Link>
 
         <div style={{ margin: "20px 0", padding: "20px", border: "2px solid #28a745", borderRadius: "8px", backgroundColor: "#f0fff4" }}>
-          <label style={{ fontWeight: "bold" }}>動詞の原形 (例: hablar): </label>
-          <input 
-            type="text" 
-            value={verbName} 
-            onChange={(e) => setVerbName(e.target.value)}
-            placeholder="hablar"
-            style={{ padding: "8px", fontSize: "1rem", width: "200px", marginRight: "20px" }}
-          />
-          <button onClick={exportJson} style={{ padding: "10px 20px", backgroundColor: "#28a745", color: "white", border: "none", borderRadius: "4px", cursor: "pointer", fontWeight: "bold" }}>
-            JSONとしてエクスポート (配布用)
-          </button>
-          <p style={{ fontSize: "0.8rem", color: "#666", marginTop: "10px" }}>※ 入力したデータはJSONファイルとして保存され、他の人と共有できます。</p>
+          <div style={{ marginBottom: "15px" }}>
+            <label style={{ fontWeight: "bold" }}>動詞の原形 (例: hablar): </label>
+            <input 
+              type="text" 
+              value={verbName} 
+              onChange={(e) => setVerbName(e.target.value)}
+              placeholder="hablar"
+              style={{ padding: "8px", fontSize: "1rem", width: "200px", marginRight: "20px" }}
+            />
+          </div>
+          
+          <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+            <button onClick={exportJson} style={{ padding: "10px 20px", backgroundColor: "#28a745", color: "white", border: "none", borderRadius: "4px", cursor: "pointer", fontWeight: "bold" }}>
+              JSON保存 & データベース登録
+            </button>
+            
+            <label style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "5px" }}>
+              <input 
+                type="checkbox" 
+                checked={shouldRegisterToDb} 
+                onChange={(e) => setShouldRegisterToDb(e.target.checked)} 
+              />
+              データベースにも登録する
+            </label>
+
+            <button 
+              onClick={resetForm} 
+              style={{ padding: "10px 20px", backgroundColor: "#6c757d", color: "white", border: "none", borderRadius: "4px", cursor: "pointer", fontWeight: "bold", marginLeft: "auto" }}
+            >
+              入力をリフレッシュ
+            </button>
+          </div>
+
+          <p style={{ fontSize: "0.8rem", color: "#666", marginTop: "10px" }}>
+            ※ JSONファイルとして保存することで、他の環境でもD&Dで読み込むことができます。
+          </p>
         </div>
 
         {langDef.groups.map((group) => (

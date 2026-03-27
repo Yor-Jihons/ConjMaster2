@@ -133,9 +133,14 @@ app.whenReady().then(() => {
         throw new Error("Invalid JSON format. Requires language, verb, and conjugations.");
       }
 
+      // 重複チェック
+      const existing = db.getVerbByName(data.language, data.verb);
+      if (existing) {
+        return { success: false, name: data.verb, error: "すでに同じ動詞がデータベースに登録されています。" };
+      }
+
       // DBに登録 (conjugationsはJSON文字列として保存)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const result = db.addVerb(data.language, data.verb, JSON.stringify(data.conjugations));
+      db.addVerb(data.language, data.verb, JSON.stringify(data.conjugations));
       return { success: true, name: data.verb };
     } catch (err) {
       console.error('Import failed:', err);
@@ -149,6 +154,20 @@ app.whenReady().then(() => {
 
   ipcMain.handle('get-verb-detail', (event, id) => {
     return db.getVerbDetail(id);
+  });
+
+  ipcMain.handle('add-verb', async (event, { lang_id, name, data }) => {
+    try {
+      // 重複チェック
+      const existing = db.getVerbByName(lang_id, name);
+      if (existing) {
+        return { success: false, error: `「${name}」はすでにデータベースに登録されています。` };
+      }
+      return db.addVerb(lang_id, name, JSON.stringify(data));
+    } catch (err) {
+      console.error('Failed to add verb:', err);
+      return { success: false, error: (err as Error).message };
+    }
   });
 });
 

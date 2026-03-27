@@ -26,4 +26,5 @@ contextBridge.exposeInMainWorld('interprocessCommunication', {
   },
   getVerbs: ( lang_id: string ) => ipcRenderer.invoke('get-verbs-list', lang_id ),
   getVerbDetail: ( id: number ) => ipcRenderer.invoke('get-verb-detail', id ),
+  addVerb: ( lang_id: string, name: string, data: any ) => ipcRenderer.invoke('add-verb', { lang_id, name, data }),
 });
