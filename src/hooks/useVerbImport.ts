@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect } from 'react';
 import { useApi } from '../contexts/ApiContext';
 
@@ -23,30 +22,30 @@ export default function useVerbImport(){
                                 alert(`インポート失敗: ${result.error}`);
                             }
                         } catch (err: unknown) {
-                        console.error("IPC Call Error:", (err as Error));
-                        alert("メインプロセスとの通信に失敗しました。再起動してビルドを確認してください。");
+                            console.error("IPC Call Error:", (err as Error));
+                            alert("メインプロセスとの通信に失敗しました。再起動してビルドを確認してください。");
+                        }
+                    } else {
+                        alert("Not a JSON file or path missing");
                     }
-                } else {
-                    alert("Not a JSON file or path missing");
                 }
             }
-        }
-    };
+        };
 
-    const handleDragOver = (e: DragEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      if (e.dataTransfer) {
-        e.dataTransfer.dropEffect = 'copy';
-      }
-    };
+        const handleDragOver = (e: DragEvent) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (e.dataTransfer) {
+                e.dataTransfer.dropEffect = 'copy';
+            }
+        };
 
-    window.addEventListener("drop", handleDrop);
-    window.addEventListener("dragover", handleDragOver);
+        window.addEventListener("drop", handleDrop);
+        window.addEventListener("dragover", handleDragOver);
     
-    return () => {
-      window.removeEventListener("drop", handleDrop);
-      window.removeEventListener("dragover", handleDragOver);
-    };
-  }, [api]);
+        return () => {
+            window.removeEventListener("drop", handleDrop);
+            window.removeEventListener("dragover", handleDragOver);
+        };
+    }, [api]);
 }
