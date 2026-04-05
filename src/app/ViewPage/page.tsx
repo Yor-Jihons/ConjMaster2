@@ -1,29 +1,13 @@
-import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import CommonLayout from '../layout';
-import createLanguageDefinition from '../../utils/CreateLanguageDefinition';
 import styles from "./viewpage.module.css";
 import ConjSpanBox from '../../components/ConjSpanBox/ConjSpanBox';
-import { useApi } from '../../contexts/ApiContext';
+import useVerbDetail from '../../hooks/useVerbDetail';
 
 function ViewPage() {
   const { language, id } = useParams<{ language: string, id: string }>();
-  const langDef = createLanguageDefinition( language! );
-  const api = useApi();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [verbData, setVerbData] = useState<any>(null);
 
-  useEffect(() => {
-    const fetchDetail = async () => {
-      const result = await api.getVerbDetail(Number(id));
-      if (result) {
-        // DBには 'data' カラムに JSON 文字列として入っているのでパースする
-        result.conjugations = JSON.parse(result.data);
-        setVerbData(result);
-      }
-    };
-    fetchDetail();
-  }, [id, api]);
+  const { langDef, verbData } = useVerbDetail( language!, Number(id) );
 
   if (!langDef) return <div>言語定義エラー</div>;
   if (!verbData) return <div>読み込み中...</div>;
