@@ -1,22 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useEffect } from 'react';
+
 import { Link, useParams } from 'react-router-dom';
 import CommonLayout from '../layout';
 import styles from "./verblistpage.module.css";
-import { useApi } from '../../contexts/ApiContext';
+import useVerbList from '../../hooks/useVerbList';
 
 function VerbListPage() {
-  const { language } = useParams<{ language: string }>()
-  const api = useApi();
-  const [verbs, setVerbs] = useState<any[]>([]);
+  const { language } = useParams<{ language: string }>();
 
-  useEffect(() => {
-    const fetchVerbs = async () => {
-      const data = await api.getVerbs(language!);
-      setVerbs(data);
-    };
-    fetchVerbs();
-  }, [language, api]);
+  const { verbs } = useVerbList( language );
 
   return (
     <CommonLayout>
