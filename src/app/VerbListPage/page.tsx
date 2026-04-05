@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { Link, useParams } from 'react-router-dom';
 import CommonLayout from '../layout';
 import styles from "./verblistpage.module.css";
