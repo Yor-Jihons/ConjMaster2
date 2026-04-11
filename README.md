@@ -83,6 +83,12 @@ npm run build:electron
 
 ---
 
+## デモ動画
+
+[リンク](https://youtu.be/tePcKZI7BGM)
+
+---
+
 ## 🤝 貢献とライセンス
 
 This is under the MIT license. See also [LICENSE](./LICENSE).
